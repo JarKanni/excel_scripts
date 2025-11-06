@@ -1,0 +1,25 @@
+function main(workbook: ExcelScript.Workbook) {
+    // Create a PivotTable based on a table in the current worksheet.
+    let sheet = workbook.getWorksheet("races");
+    let table = workbook.getWorksheet("races").getUsedRange();
+
+    // Check if exists; delete if so
+    if (workbook.getWorksheet("PivotTEST")) {
+        workbook.getWorksheet("PivotTEST").delete();
+        console.log('Sheet "${PivotTEST}" deleted.');
+    } else {    
+        
+    // Add PivotTable to new worksheet.    
+    let newSheet = workbook.addWorksheet("PivotTEST"); 
+    let pivotTable: ExcelScript.PivotTable = newSheet.addPivotTable("Start Times by Laps", table, "A1");
+
+    // Add fields to the PivotTable to show "start_time by total_laps".
+    pivotTable.addRowHierarchy(pivotTable.getHierarchy("start_time"));
+    pivotTable.addDataHierarchy(pivotTable.getHierarchy("total_laps"));
+    pivotTable.addDataHierarchy(pivotTable.getHierarchy("total_laps")).setShowAs({ calculation: ExcelScript.ShowAsCalculation.percentOfGrandTotal});
+
+    // Set new name for fields
+    pivotTable.getDataHierarchy("Sum of total_laps2").setName("% of Season");
+    pivotTable.getDataHierarchy("Sum of total_laps").setName("Total Laps");
+    }
+}
