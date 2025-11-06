@@ -1,2 +1,2 @@
-# excel_scripts
+# Excel Scripts
 Assortment of Excel Scripts
